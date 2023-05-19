@@ -1,0 +1,157 @@
+html {
+    position: relative;
+    min-height: 100%;
+}
+
+@media (min-width: 768px) {
+    html {
+        font-size: 16px;
+    }
+}
+
+@media screen and (max-width: 600px) {
+    .column {
+        width: 100%;
+    }
+}
+
+.btn:focus, .btn:active:focus, .btn-link.nav-link:focus, .form-control:focus, .form-check-input:focus {
+    box-shadow: 0 0 0 0.1rem white, 0 0 0 0.25rem #258cfb;
+}
+
+html {
+    position: relative;
+    min-height: 100%;
+}
+
+body {
+    margin-bottom: 60px;
+}
+
+.column {
+    float: left;
+    padding: 10px;
+    display: inline-block;
+}
+
+    .column.right {
+        width: 35%;
+    }
+
+    .column.left {
+        width: 65%;
+    }
+
+.row::after {
+    content: "";
+    display: table;
+    clear: both;
+}
+
+input[type=text], input[type=number] {
+    width: 85%;
+    padding: 12px 20px;
+    margin: 8px 0;
+    box-sizing: border-box;
+    border: 2px solid lightgrey;
+    color: black;
+}
+
+.centered-heading {
+    text-align: center;
+    font-style: normal;
+    font-weight: 700;
+    font-size: 40px;
+    color: black;
+    text-align: center;
+    margin-bottom: 15px;
+    padding: 12px 20px;
+    border-bottom: 2px solid lightgrey;
+}
+
+#themvao {
+    background-color: cornflowerblue;
+    padding: 5px 5px;
+    text-align: center;
+    font-weight: 700;
+    line-height: 40px;
+    vertical-align: middle;
+    width: 200px;
+    display: inline-block;
+    margin-top: 40px;
+    border: none;
+    border-radius: 2px;
+    color: white;
+}
+
+#thanhtoan {
+    background-color: white;
+    padding: 5px 5px;
+    text-align: center;
+    font-weight: 700;
+    line-height: 40px;
+    vertical-align: middle;
+    width: 200px;
+    display: inline-block;
+    margin-top: 40px;
+    border: 1px solid orange;
+    border-radius: 2px;
+    color: orange;
+}
+
+table {
+    border-collapse: collapse;
+    width: 100%;
+}
+
+th {
+    text-align: center;
+    /* Căn giữa cho các tiêu đề cột */
+}
+
+tr:nth-child(even) {
+    background-color: #f2f2f2;
+}
+
+td:nth-child(1), td:nth-child(2), td:nth-child(3), td:nth-child(6) {
+    text-align: center;
+    /* Căn giữa cho cột STT, Tên sản phẩm, Số lượng và Thao tác */
+}
+
+td:nth-child(4), td:nth-child(5) {
+    text-align: right;
+    /* Căn phải cho cột Đơn giá và Tạm tính */
+}
+
+th.align-right {
+    text-align: right;
+    /* Căn phải cho các tiêu đề cột */
+}
+
+td.align-right {
+    text-align: right;
+    /* Căn phải cho các giá trị trong cột */
+}
+
+.delete-icon {
+    cursor: pointer;
+    color: red;
+}
+
+caption {
+    caption-side: bottom;
+    text-align: center;
+    background-color: #f2f2f2;
+}
+
+#tongTien {
+    text-align: right;
+    border-top: 2px solid lightgrey;
+    padding: 12px 20px;
+    margin-top: 30px;
+}
+
+label {
+    color: black;
+    font-weight: bold;
+}

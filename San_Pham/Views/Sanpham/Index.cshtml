@@ -1,0 +1,142 @@
+﻿@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    <link rel="stylesheet" href="~/css/style.css" />
+    <script src="@Url.Content("~/js/site.js")"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" />
+}
+
+<div class="row">
+    <div class="column left custom-label-left">
+        <h1 class="centered-heading">Danh sách sản phẩm</h1>
+        <table id="myTable">
+            <caption id="tableCaption">Không có dữ liệu</caption>
+            <tr>
+                <th>STT</th>
+                <th>Tên sản phẩm</th>
+                <th>Số lượng</th>
+                <th class="align-right">Đơn giá</th>
+                <th class="align-right">Tạm tính</th>
+                <th>Thao tác</th>
+            </tr>
+        </table>
+        <div id="tongTien">Tổng thành tiền <span id="tongtien">0</span> đồng</div>
+    </div>
+    <div class="column right custom-label-right">
+        <h1 class="centered-heading">Thông tin sản phẩm</h1>
+        <form id="myForm" name="myform" action="/Sanpham/Index" method="post" onsubmit="updateTable(event)">
+            <label for="sanPham">Tên sản phẩm</label>
+            <input type="text" id="sanPham" name="sanpham">
+            <label for="soLuong">Số lượng</label>
+            <input type="text" id="soLuong" name="soLuong">
+            <label for="donGia">Đơn giá bán</label>
+            <input type="text" id="donGia" name="donGia">
+            <button type="submit" id="themvao" class="button">Thêm vào giỏ hàng</button>
+            <button type="submit" id="thanhtoan" class="button">Thanh toán</button>
+        </form>
+    </div>
+</div>
+<script>
+    function updateTable(event) {
+        event.preventDefault();
+        var table = document.getElementById("myTable");
+        var row = table.insertRow(table.rows.length);
+        var soLuong = parseInt(document.getElementById("soLuong").value.replace(/,/g, ''));
+        var donGia = parseInt(document.getElementById("donGia").value.replace(/,/g, ''));
+        var tamtinh = soLuong * donGia;
+        var rowCount = table.rows.length - 1;
+        for (var i = 0; i < 6; i++) {
+            var cell = row.insertCell(i);
+            switch (i) {
+                case 0:
+                    cell.innerHTML = rowCount;
+                    break;
+                case 1:
+                    cell.innerHTML = document.getElementById("sanPham").value;
+                    break;
+                case 2:
+                    cell.innerHTML = document.getElementById("soLuong").value;
+                    break;
+                case 3:
+                    cell.innerHTML = document.getElementById("donGia").value;
+                    break;
+                case 4:
+                    if (!isNaN(tamtinh)) {
+                        cell.innerHTML = tamtinh.toLocaleString('en-US');
+                    } else {
+                        cell.innerHTML = "NaN";
+                    }
+                    break;
+                case 5:
+                    var deleteIcon = document.createElement("i");
+                    deleteIcon.className = "fas fa-trash-alt delete-icon";
+                    deleteIcon.setAttribute("onclick", "myDeleteFunction(this)");
+                    cell.appendChild(deleteIcon);
+                    break;
+                default:
+                    cell.innerHTML = "CELL" + i;
+            }
+        }
+
+        // Kiểm tra giá trị tamtinh sau khi thêm vào bảng
+        var lastRow = table.rows[table.rows.length - 1];
+        var lastRowTamtinh = parseInt(lastRow.cells[4].innerHTML.replace(/,/g, ''));
+        if (isNaN(lastRowTamtinh)) {
+            lastRow.cells[4].innerHTML = "0";
+            table.deleteRow(table.rows.length - 1);
+        }
+        // Xóa giá trị trong các trường input
+        document.getElementById("sanPham").value = "";
+        document.getElementById("soLuong").value = "";
+        document.getElementById("donGia").value = "";
+        updateTotal(); // Cập nhật tổng thành tiền
+    }
+
+    function myDeleteFunction(row) {
+        var i = row.parentNode.parentNode.rowIndex;
+        document.getElementById("myTable").deleteRow(i);
+        // Cập nhật lại số thứ tự cho các dòng còn lại
+        var table = document.getElementById("myTable");
+        for (var i = 1; i < table.rows.length; i++) {
+            table.rows[i].cells[0].innerHTML = i;
+        }
+        var tongtien = 0;
+        var table = document.getElementById("myTable");
+        for (var i = 1; i < table.rows.length; i++) {
+            var tamtinhCell = table.rows[i].cells[4];
+            var tamtinh = parseInt(tamtinhCell.innerHTML.replace(/,/g, ''));
+            tongtien += tamtinh;
+        }
+        document.getElementById("tongtien").textContent = tongtien.toLocaleString('en-US');
+        var tableCaption = document.getElementById("tableCaption");
+        if (table.rows.length <= 1) {
+            tableCaption.style.display = "table-caption"; // Hiển thị caption khi bảng trống sau khi xóa dòng
+        }
+    }
+
+    document.getElementById("thanhtoan").onclick = function () {
+        var table = document.getElementById("myTable");
+        var rowCount = table.rows.length;
+        for (var i = rowCount - 1; i > 0; i--) {
+            table.deleteRow(i);
+        }
+        updateTotal(); // Cập nhật tổng thành tiền sau khi xóa hết các dòng trong bảng
+    };
+
+    function updateTotal() {
+        var tongtien = 0;
+        var table = document.getElementById("myTable");
+        for (var i = 1; i < table.rows.length; i++) {
+            var tamtinhCell = table.rows[i].cells[4];
+            var tamtinh = parseInt(tamtinhCell.innerHTML.replace(/,/g, ''));
+            tongtien += tamtinh;
+        }
+        document.getElementById("tongtien").textContent = tongtien.toLocaleString('en-US');
+        var tableCaption = document.getElementById("tableCaption");
+        if (table.rows.length <= 1) {
+            tableCaption.style.display = "table-caption"; // Hiển thị caption khi bảng trống
+        } else {
+            tableCaption.style.display = "none"; // Ẩn caption khi có dữ liệu trong bảng
+        }
+    }
+</script>
